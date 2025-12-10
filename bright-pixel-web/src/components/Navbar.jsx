@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './Navbar.css';
 import { Menu, X, ExternalLink } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/logo.png';
@@ -25,7 +26,7 @@ const Navbar = () => {
                 </Link>
 
                 {/* Desktop Menu */}
-                <div className="hidden md:flex" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+                <div className="nav-desktop">
                     {['Home', 'About', 'Services', 'Portfolio'].map((item) => {
                         if (item === 'Portfolio') {
                             return (
@@ -66,8 +67,8 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Menu Button */}
-                <div className="md:hidden" style={{ display: 'flex', zIndex: 10 }}>
-                    <button onClick={() => setIsOpen(!isOpen)} style={{ background: 'none', border: 'none', color: 'white' }}>
+                <div className="nav-mobile-toggle">
+                    <button onClick={() => setIsOpen(!isOpen)}>
                         {isOpen ? <X /> : <Menu />}
                     </button>
                 </div>
@@ -75,20 +76,7 @@ const Navbar = () => {
 
             {/* Mobile Menu Overlay */}
             {isOpen && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100vh',
-                    background: 'var(--bg-dark)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '2rem',
-                    zIndex: 9
-                }}>
+                <div className="nav-mobile-overlay">
                     {['Home', 'About', 'Services', 'Portfolio'].map((item) => {
                         if (item === 'Portfolio') {
                             return (

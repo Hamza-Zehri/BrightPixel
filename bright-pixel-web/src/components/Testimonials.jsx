@@ -3,19 +3,19 @@ import { Star, Quote } from 'lucide-react';
 
 const testimonials = [
     {
-        name: 'Alex Rony',
-        role: 'CEO, TechFlow',
-        text: 'Bright Pixel has been instrumental in optimizing our customer support. Their efficient BPO services and dedicated team have far exceeded our expectations.'
+        name: 'Ahmed Khan Zehri',
+        role: 'CEO, Khuzdar Mining Co',
+        text: 'Bright Pixel has truly transformed our digital presence. Their understanding of the local market combined with top-tier tech solutions helped us reach new heights in Balochistan.'
     },
     {
-        name: 'Jennifer Lynn',
-        role: 'Director, Innovate Corp',
-        text: 'The software is exceptionally intuitive, scalable, and reliable. It handles complex tasks effortlessly and is easy for all users to navigate. A top-notch solution!'
+        name: 'Sana Baloch',
+        role: 'Director, Digital Khuzdar',
+        text: 'An exceptional team that delivers quality results. Their software solutions are perfectly tailored to our needs, making business operations smoother than ever.'
     },
     {
-        name: 'Michael James',
-        role: 'Founder, AI Start',
-        text: 'Their AI automation platform is a game-changer. It streamlines processes with smart algorithms, saving us significant time. Highly recommend this innovative solution!'
+        name: 'Mir Hassan',
+        role: 'Founder, Bolan Traders',
+        text: 'Professional, reliable, and skilled. Bright Pixel provided us with an automation system that saved us countless hours. The best tech partner in the region!'
     }
 ];
 
