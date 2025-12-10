@@ -1,8 +1,40 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Contact = () => {
+    const form = useRef();
+    const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState({ type: '', message: '' });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setStatus({ type: '', message: '' });
+
+        // EmailJS Configuration
+        const SERVICE_ID = 'service_i7yr951';
+        const TEMPLATE_ID = 'template_cbaieqk';
+        const PUBLIC_KEY = 'V1uyJIGHg2PHC4lsf';
+
+        emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY)
+            .then((result) => {
+                setStatus({ type: 'success', message: 'Message sent successfully! We will get back to you soon.' });
+                e.target.reset();
+            }, (error) => {
+                console.error('EmailJS Error:', error);
+
+                // For now, if the error is due to placeholders, we can't do much but show an error.
+                // However, user might try to test with placeholders.
+
+                setStatus({ type: 'error', message: 'Failed to send message. Please try again later or contact us directly.' });
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
     return (
         <section id="contact" style={{ padding: '8rem 0', background: 'var(--bg-dark)' }}>
             <div className="container">
@@ -102,10 +134,10 @@ const Contact = () => {
                         <h3 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem', color: 'var(--text-main)' }}>We’d Love to Hear from You</h3>
                         <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Send us a message and we'll respond as soon as possible.</p>
 
-                        <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                        <form ref={form} onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                             <div>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-main)' }}>Your Name*</label>
-                                <input type="text" placeholder="Your Name" style={{
+                                <input name="user_name" type="text" required placeholder="Your Name" style={{
                                     width: '100%',
                                     padding: '1rem',
                                     borderRadius: '0.75rem',
@@ -118,7 +150,7 @@ const Contact = () => {
 
                             <div>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-main)' }}>Your Email*</label>
-                                <input type="email" placeholder="Your Email" style={{
+                                <input name="user_email" type="email" required placeholder="Your Email" style={{
                                     width: '100%',
                                     padding: '1rem',
                                     borderRadius: '0.75rem',
@@ -131,7 +163,7 @@ const Contact = () => {
 
                             <div>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-main)' }}>Your Phone</label>
-                                <input type="tel" placeholder="Your Phone" style={{
+                                <input name="user_phone" type="tel" placeholder="Your Phone" style={{
                                     width: '100%',
                                     padding: '1rem',
                                     borderRadius: '0.75rem',
@@ -144,7 +176,7 @@ const Contact = () => {
 
                             <div>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-main)' }}>Write a Message*</label>
-                                <textarea rows="4" placeholder="Write a Message" style={{
+                                <textarea name="message" required rows="4" placeholder="Write a Message" style={{
                                     width: '100%',
                                     padding: '1rem',
                                     borderRadius: '0.75rem',
@@ -156,9 +188,21 @@ const Contact = () => {
                                 }}></textarea>
                             </div>
 
-                            <button type="submit" className="btn btn-primary" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
-                                Send Message <Send size={18} />
+                            <button disabled={loading} type="submit" className="btn btn-primary" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', opacity: loading ? 0.7 : 1 }}>
+                                {loading ? 'Sending...' : 'Send Message'} <Send size={18} />
                             </button>
+                            {status.message && (
+                                <p style={{
+                                    marginTop: '1rem',
+                                    padding: '0.75rem',
+                                    borderRadius: '0.5rem',
+                                    background: status.type === 'success' ? 'rgba(74, 222, 128, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                                    color: status.type === 'success' ? '#4ade80' : '#ef4444',
+                                    textAlign: 'center'
+                                }}>
+                                    {status.message}
+                                </p>
+                            )}
                         </form>
                     </motion.div>
 

@@ -4,24 +4,24 @@ import { ArrowUpRight } from 'lucide-react';
 
 const projects = [
     {
-        title: 'FinTech Dashboard',
+        title: 'Gold Khuzdar Gym Dashboard',
         category: 'Web Application',
-        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'
+        image: 'src/assets/image2.png'
     },
     {
-        title: 'Neon E-Commerce',
-        category: 'Online Store',
-        image: 'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&w=800&q=80'
+        title: 'Al-Farooq Residential School Website',
+        category: 'Website',
+        image: 'src/assets/image3.png'
     },
     {
-        title: 'AI Health Assistant',
+        title: 'Cgpa Calculator',
         category: 'Mobile App',
-        image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80'
+        image: 'src/assets/image4.png'
     },
     {
-        title: 'Crypto Exchange',
-        category: 'Blockchain',
-        image: 'https://images.unsplash.com/photo-1621761191319-c6fb62004040?auto=format&fit=crop&w=800&q=80'
+        title: 'Al-Farooq School Management System',
+        category: 'Software',
+        image: 'src/assets/image1.png'
     }
 ];
 
