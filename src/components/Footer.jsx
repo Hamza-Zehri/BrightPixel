@@ -91,7 +91,7 @@ const Footer = () => {
                             </li>
                             <li style={{ display: 'flex', gap: '1rem', alignItems: 'center', color: 'var(--text-muted)' }}>
                                 <MapPin size={18} color="var(--primary)" />
-                                <span>Chamrock hotel, Khuzdar</span>
+                                <span>Khuzdar, Balochistan</span>
                             </li>
                         </ul>
                     </div>

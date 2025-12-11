@@ -116,7 +116,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>Location</p>
-                                    <h4 style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-main)' }}>Chamrock hostel, Khuzdar</h4>
+                                    <h4 style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-main)' }}>,Khuzdar, Balochistan</h4>
                                 </div>
                             </div>
                         </div>
