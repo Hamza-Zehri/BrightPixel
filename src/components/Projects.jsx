@@ -1,27 +1,31 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import image1 from '../assets/image1.png';
+import image2 from '../assets/image2.png';
+import image3 from '../assets/image3.png';
+import image4 from '../assets/image4.png';
 
 const projects = [
     {
         title: 'Gold Khuzdar Gym Dashboard',
         category: 'Web Application',
-        image: 'src/assets/image2.png'
+        image: image2
     },
     {
         title: 'Al-Farooq Residential School Website',
         category: 'Website',
-        image: 'src/assets/image3.png'
+        image: image3
     },
     {
         title: 'Cgpa Calculator',
         category: 'Mobile App',
-        image: 'src/assets/image4.png'
+        image: image4
     },
     {
         title: 'Al-Farooq School Management System',
         category: 'Software',
-        image: 'src/assets/image1.png'
+        image: image1
     }
 ];
 

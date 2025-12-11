@@ -35,7 +35,7 @@ const ChatAssistant = () => {
         setTimeout(() => {
             const botResponse = {
                 id: Date.now() + 1,
-                text: "Thank you for your message! Our team will get back to you shortly.",
+                text: "Typing...",
                 sender: 'bot'
             };
             setMessages(prev => [...prev, botResponse]);
