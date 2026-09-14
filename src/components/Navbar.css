@@ -1,0 +1,71 @@
+/* Navbar.css */
+
+/* Desktop Menu - Hidden on small screens */
+.nav-desktop {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+/* Mobile Menu Toggle - Hidden on large screens */
+.nav-mobile-toggle {
+    display: none;
+    /* Hidden by default (desktop) */
+    z-index: 10;
+}
+
+.nav-mobile-toggle button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile Menu Overlay */
+.nav-mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    z-index: 9;
+    /* Add a subtle animation */
+    animation: fadeIn 0.3s ease-out;
+}
+
+.nav-mobile-overlay .nav-link {
+    font-size: 1.5rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+    .nav-desktop {
+        display: none;
+        /* Hide desktop menu on mobile */
+    }
+
+    .nav-mobile-toggle {
+        display: flex;
+        /* Show hamburger on mobile */
+    }
+}
