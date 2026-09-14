@@ -1,62 +1,39 @@
-import React, { useState, useRef } from 'react';
-import emailjs from '@emailjs/browser';
+import React, { useState } from 'react';
+import { useForm, ValidationError } from '@formspree/react';
 import { MessageCircle, Phone, Mail, MapPin, Send, Map } from 'lucide-react';
 import Reveal from './Reveal';
 
 const Contact = () => {
-    const form = useRef();
-    const [loading, setLoading] = useState(false);
-    const [status, setStatus] = useState({ type: '', message: '', mailto: '', whatsapp: '' });
+    const [state, handleSubmit] = useForm('mrpgwdqn');
+    const [formData, setFormData] = useState({ name: '', email: '', phone: '', service: '', message: '' });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setStatus({ type: '', message: '', mailto: '', whatsapp: '' });
+    const handleChange = (e) => {
+        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
 
-        // EmailJS Configuration
-        const SERVICE_ID = 'service_i7yr951';
-        const TEMPLATE_ID = 'template_cbaieqk';
-        const PUBLIC_KEY = 'V1uyJIGHg2PHC4lsf';
-
-        // Capture details so we can build fallback links even if EmailJS fails
-        const formData = new FormData(form.current);
-        const details = {
-            name: formData.get('user_name') || '',
-            email: formData.get('user_email') || '',
-            phone: formData.get('user_phone') || '',
-            service: formData.get('service_interest') || '',
-            message: formData.get('message') || ''
+    const buildFallback = () => {
+        const details = formData;
+        const subject = encodeURIComponent(`Project Inquiry${details.name ? ' from ' + details.name : ''}`);
+        const body = encodeURIComponent(
+            `Name: ${details.name}\nEmail: ${details.email}\nPhone: ${details.phone}\nInterested in: ${details.service}\n\n${details.message}`
+        );
+        const waText = encodeURIComponent(
+            `Hi Bright Pixel! My name is ${details.name}${details.phone ? ' (' + details.phone + ')' : ''}.\n\n${details.message}`
+        );
+        return {
+            mailto: `mailto:hamidzehri42@gmail.com?subject=${subject}&body=${body}`,
+            whatsapp: `https://wa.me/923357981318?text=${waText}`
         };
+    };
 
-        const fallbackLinks = () => {
-            const subject = encodeURIComponent(`Project Inquiry${details.name ? ' from ' + details.name : ''}`);
-            const body = encodeURIComponent(
-                `Name: ${details.name}\nEmail: ${details.email}\nPhone: ${details.phone}\nInterested in: ${details.service}\n\n${details.message}`
-            );
-            const waText = encodeURIComponent(
-                `Hi Bright Pixel! My name is ${details.name}${details.phone ? ' (' + details.phone + ')' : ''}.\n\n${details.message}`
-            );
-            return {
-                mailto: `mailto:hamidzehri42@gmail.com?subject=${subject}&body=${body}`,
-                whatsapp: `https://wa.me/923357981318?text=${waText}`
-            };
-        };
-
-        emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY)
-            .then(() => {
-                setStatus({ type: 'success', message: 'Message sent successfully! We will get back to you soon.' });
-                e.target.reset();
-            }, (error) => {
-                console.error('EmailJS Error:', error);
-                setStatus({
-                    type: 'error',
-                    message: 'Direct sending is temporarily unavailable. Your message was not lost — send it instantly via the buttons below.',
-                    ...fallbackLinks()
-                });
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+    const inputStyle = {
+        width: '100%',
+        padding: '1rem',
+        borderRadius: '0.75rem',
+        background: 'var(--bg-dark)',
+        border: '1px solid var(--border-light)',
+        color: 'var(--text-main)',
+        outline: 'none'
     };
 
     const contactItems = [
@@ -202,57 +179,26 @@ const Contact = () => {
                             <h3 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.5rem' }}>Request a Quote</h3>
                             <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Tell us about your project and we'll get back within 24 hours.</p>
 
-                            <form ref={form} onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                                 <div>
                                     <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>Your Name*</label>
-                                    <input name="user_name" type="text" required placeholder="Your Name" style={{
-                                        width: '100%',
-                                        padding: '1rem',
-                                        borderRadius: '0.75rem',
-                                        background: 'var(--bg-dark)',
-                                        border: '1px solid var(--border-light)',
-                                        color: 'var(--text-main)',
-                                        outline: 'none'
-                                    }} />
+                                    <input name="name" type="text" required placeholder="Your Name" onChange={handleChange} style={inputStyle} />
                                 </div>
 
                                 <div>
                                     <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>Your Email*</label>
-                                    <input name="user_email" type="email" required placeholder="Your Email" style={{
-                                        width: '100%',
-                                        padding: '1rem',
-                                        borderRadius: '0.75rem',
-                                        background: 'var(--bg-dark)',
-                                        border: '1px solid var(--border-light)',
-                                        color: 'var(--text-main)',
-                                        outline: 'none'
-                                    }} />
+                                    <input name="email" type="email" required placeholder="Your Email" onChange={handleChange} style={inputStyle} />
+                                    <ValidationError field="email" errors={state.errors} style={{ color: '#ef4444', fontSize: '0.85rem', marginTop: '0.35rem' }} />
                                 </div>
 
                                 <div>
                                     <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>Your Phone</label>
-                                    <input name="user_phone" type="tel" placeholder="Your Phone" style={{
-                                        width: '100%',
-                                        padding: '1rem',
-                                        borderRadius: '0.75rem',
-                                        background: 'var(--bg-dark)',
-                                        border: '1px solid var(--border-light)',
-                                        color: 'var(--text-main)',
-                                        outline: 'none'
-                                    }} />
+                                    <input name="phone" type="tel" placeholder="Your Phone" onChange={handleChange} style={inputStyle} />
                                 </div>
 
                                 <div>
                                     <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>What do you need?*</label>
-                                    <select name="service_interest" style={{
-                                        width: '100%',
-                                        padding: '1rem',
-                                        borderRadius: '0.75rem',
-                                        background: 'var(--bg-dark)',
-                                        border: '1px solid var(--border-light)',
-                                        color: 'var(--text-main)',
-                                        outline: 'none'
-                                    }}>
+                                    <select name="service" required onChange={handleChange} style={inputStyle}>
                                         <option value="">Select a service</option>
                                         <option value="website">Website</option>
                                         <option value="business-software">Business Software</option>
@@ -267,44 +213,36 @@ const Contact = () => {
 
                                 <div>
                                     <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>Project Details*</label>
-                                    <textarea name="message" required rows="4" placeholder="Describe your project..." style={{
-                                        width: '100%',
-                                        padding: '1rem',
-                                        borderRadius: '0.75rem',
-                                        background: 'var(--bg-dark)',
-                                        border: '1px solid var(--border-light)',
-                                        color: 'var(--text-main)',
-                                        outline: 'none',
-                                        resize: 'none'
-                                    }}></textarea>
+                                    <textarea name="message" required rows="4" placeholder="Describe your project..." onChange={handleChange} style={{ ...inputStyle, resize: 'none' }}></textarea>
+                                    <ValidationError field="message" errors={state.errors} style={{ color: '#ef4444', fontSize: '0.85rem', marginTop: '0.35rem' }} />
                                 </div>
 
-                                <button disabled={loading} type="submit" className="btn btn-glow" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', opacity: loading ? 0.7 : 1 }}>
-                                    {loading ? 'Sending...' : 'Send Message'} <Send size={18} />
+                                <button disabled={state.submitting} type="submit" className="btn btn-glow" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', opacity: state.submitting ? 0.7 : 1 }}>
+                                    {state.submitting ? 'Sending...' : 'Send Message'} <Send size={18} />
                                 </button>
-                                {status.message && (
+
+                                {state.succeeded && (
                                     <p style={{
                                         marginTop: '0.5rem',
                                         padding: '0.75rem',
                                         borderRadius: '0.5rem',
-                                        background: status.type === 'success' ? 'rgba(74, 222, 128, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                                        color: status.type === 'success' ? '#4ade80' : '#ef4444',
+                                        background: 'rgba(74, 222, 128, 0.1)',
+                                        color: '#4ade80',
                                         textAlign: 'center'
                                     }}>
-                                        {status.message}
+                                        Message sent successfully! We will get back to you within 24 hours.
                                     </p>
                                 )}
-                                {status.whatsapp && (
-                                    <div style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '0.5rem',
-                                        marginTop: '0.75rem'
-                                    }}>
-                                        <a href={status.whatsapp} target="_blank" rel="noopener noreferrer" className="btn btn-glow" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+
+                                {state.errors && !state.succeeded && (
+                                    <div style={{ marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                        <p style={{ padding: '0.75rem', borderRadius: '0.5rem', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', textAlign: 'center' }}>
+                                            Something went wrong. Use the buttons below — your message won't be lost.
+                                        </p>
+                                        <a href={buildFallback().whatsapp} target="_blank" rel="noopener noreferrer" className="btn btn-glow" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
                                             <MessageCircle size={18} /> Send on WhatsApp
                                         </a>
-                                        <a href={status.mailto} className="btn btn-outline" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                                        <a href={buildFallback().mailto} className="btn btn-outline" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
                                             <Mail size={18} /> Send via Email
                                         </a>
                                     </div>
