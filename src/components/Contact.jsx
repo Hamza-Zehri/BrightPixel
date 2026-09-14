@@ -6,17 +6,41 @@ import Reveal from './Reveal';
 const Contact = () => {
     const form = useRef();
     const [loading, setLoading] = useState(false);
-    const [status, setStatus] = useState({ type: '', message: '' });
+    const [status, setStatus] = useState({ type: '', message: '', mailto: '', whatsapp: '' });
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        setStatus({ type: '', message: '' });
+        setStatus({ type: '', message: '', mailto: '', whatsapp: '' });
 
         // EmailJS Configuration
         const SERVICE_ID = 'service_i7yr951';
         const TEMPLATE_ID = 'template_cbaieqk';
         const PUBLIC_KEY = 'V1uyJIGHg2PHC4lsf';
+
+        // Capture details so we can build fallback links even if EmailJS fails
+        const formData = new FormData(form.current);
+        const details = {
+            name: formData.get('user_name') || '',
+            email: formData.get('user_email') || '',
+            phone: formData.get('user_phone') || '',
+            service: formData.get('service_interest') || '',
+            message: formData.get('message') || ''
+        };
+
+        const fallbackLinks = () => {
+            const subject = encodeURIComponent(`Project Inquiry${details.name ? ' from ' + details.name : ''}`);
+            const body = encodeURIComponent(
+                `Name: ${details.name}\nEmail: ${details.email}\nPhone: ${details.phone}\nInterested in: ${details.service}\n\n${details.message}`
+            );
+            const waText = encodeURIComponent(
+                `Hi Bright Pixel! My name is ${details.name}${details.phone ? ' (' + details.phone + ')' : ''}.\n\n${details.message}`
+            );
+            return {
+                mailto: `mailto:hamidzehri42@gmail.com?subject=${subject}&body=${body}`,
+                whatsapp: `https://wa.me/923357981318?text=${waText}`
+            };
+        };
 
         emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY)
             .then(() => {
@@ -24,7 +48,11 @@ const Contact = () => {
                 e.target.reset();
             }, (error) => {
                 console.error('EmailJS Error:', error);
-                setStatus({ type: 'error', message: 'Failed to send message. Please try again later or contact us directly.' });
+                setStatus({
+                    type: 'error',
+                    message: 'Direct sending is temporarily unavailable. Your message was not lost — send it instantly via the buttons below.',
+                    ...fallbackLinks()
+                });
             })
             .finally(() => {
                 setLoading(false);
@@ -265,6 +293,21 @@ const Contact = () => {
                                     }}>
                                         {status.message}
                                     </p>
+                                )}
+                                {status.whatsapp && (
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '0.5rem',
+                                        marginTop: '0.75rem'
+                                    }}>
+                                        <a href={status.whatsapp} target="_blank" rel="noopener noreferrer" className="btn btn-glow" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                                            <MessageCircle size={18} /> Send on WhatsApp
+                                        </a>
+                                        <a href={status.mailto} className="btn btn-outline" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                                            <Mail size={18} /> Send via Email
+                                        </a>
+                                    </div>
                                 )}
                             </form>
                         </div>
